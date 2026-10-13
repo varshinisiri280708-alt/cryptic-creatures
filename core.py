@@ -294,18 +294,12 @@ def load_external_sound(filename):
         return None
 
 sound_footsteps_file = None
-sound_celebration_file = None
-sound_lost_file = None
-sound_opening_file = None
 
 try:
     if not pygame.mixer.get_init():
         pygame.mixer.init()
 
     sound_footsteps_file = load_external_sound("footsteps.mp3")
-    sound_celebration_file = load_external_sound("celebration.mp3")
-    sound_lost_file = load_external_sound("lost.mp3")
-    sound_opening_file = load_external_sound("opening.mp3")
 
 except pygame.error as error:
     print("Audio initialization failed:", error)

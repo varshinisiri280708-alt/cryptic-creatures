@@ -115,10 +115,23 @@ def main():
                     persist_settings()
                     set_message("Seasonal realm changed: " + core.active_theme, 2.5)
 
-            elif event.type == pygame.MOUSEMOTION and core.mode == "game":
-                if pygame.mouse.get_focused():
+            
+            elif event.type == pygame.MOUSEMOTION:
+                if core.mode == "settings" and core.slider_drag is not None:
+                    key, r, lo, hi = core.slider_drag
+
+                    ratio = (event.pos[0] - r.x) / r.width
+                    ratio = max(0.0, min(1.0, ratio))
+
+                    core.settings[key] = lo + ratio * (hi - lo)
+                    persist_settings()
+
+                elif core.mode == "game" and pygame.mouse.get_focused():
                     mouse_delta += event.rel[0]
 
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                core.slider_drag = None
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if core.mode == "game" and event.button == 3:  # Right Click
                     trigger_lantern_flash()
@@ -136,7 +149,9 @@ def main():
                         set_game_mode("story_gallery")
                     elif clicked == "Theme Gallery":
                         set_game_mode("theme_gallery")
-                    elif clicked == "Back to Title":
+                    elif clicked == "back":
+                        core.slider_drag=None
+                        persist_settings()
                         set_game_mode("menu")
                 elif core.mode == "story_gallery":
                     rects = draw_story_gallery()
@@ -170,9 +185,15 @@ def main():
                         handle_minigame_click(clicked)
                 elif core.mode == "settings":
                     sliders, rects = draw_settings()
+                    core.slider_drag = None
                     for key, r, lo, hi in sliders:
                         if r.inflate(0, 18).collidepoint(event.pos):
                             core.slider_drag = (key, r, lo, hi)
+
+                            ratio = (event.pos[0] - r.x) / r.width
+                            ratio = max(0.0, min(1.0, ratio))
+                            core.settings[key] = lo + ratio * (hi - lo)
+                            persist_settings()
                             break
                     if core.slider_drag is None:
                         clicked = find_button(rects, event.pos)
@@ -188,9 +209,12 @@ def main():
                             persist_settings()
                         elif clicked == "reset":
                             core.settings = DEFAULT_SETTINGS.copy()
+                            core.slider_drag=None
                             persist_settings()
                         elif clicked == "back":
-                            set_game_mode(settings_return_mode)
+                            core.slider_drag=None
+                            persist_settings()
+                            set_game_mode("menu")
                         elif clicked in ("Story", "Normal", "Nightmare"):
                             core.settings["difficulty"] = clicked
                             persist_settings()
@@ -296,6 +320,8 @@ def main():
                             start_dialogue("intro")
                         else:
                             persist_save(won=True)
+                            if core.sound_celebration_file:
+                                core.sound_celebration_file.play()
                             set_game_mode("victory")
                     elif clicked == "Main Menu":
                         set_game_mode("menu")

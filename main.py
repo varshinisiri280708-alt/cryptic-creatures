@@ -9,6 +9,7 @@ from game import main
 
 if __name__ == "__main__":
     try:
+        core.start_background_music()
         main()
     except Exception:
         crash_path = os.path.join(core.BASE_DIR, "crash_log.txt")

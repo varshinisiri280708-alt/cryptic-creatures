@@ -47,10 +47,6 @@ python main.py
 The project includes a sound-assets folder at `assets/sounds/`.
 
 - `background.mp3` — Background music
-- `footsteps.mp3` — Player movement sound
-- `opening.mp3` — Opening sound
-- `celebration.mp3` — Victory sound
-- `lost.mp3` — Failure sound
 
 Only include the sound files that are present in the repository. Sound effects must be loaded and connected to the corresponding game events in the code to play during gameplay.
 

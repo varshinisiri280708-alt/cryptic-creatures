@@ -1,0 +1,12 @@
+{
+  "master_volume": 0.65,
+  "music_volume": 0.35,
+  "sfx_volume": 0.8,
+  "sensitivity": 0.0022,
+  "dark_mode": true,
+  "character_color": 2,
+  "character_type": 0,
+  "difficulty": "Normal",
+  "minimap": true,
+  "head_bob": true
+}

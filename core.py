@@ -279,6 +279,52 @@ def set_game_mode(new_mode):
         pygame.event.set_grab(False)
         pygame.mouse.set_visible(True)
 
+# Downloaded sound effects
+SOUND_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "assets", "sounds"
+)
+
+def load_external_sound(filename):
+    path = os.path.join(SOUND_DIR, filename)
+    try:
+        return pygame.mixer.Sound(path)
+    except (pygame.error, OSError) as error:
+        print(f"Could not load {filename}: {error}")
+        return None
+
+sound_footsteps_file = None
+sound_celebration_file = None
+sound_lost_file = None
+sound_opening_file = None
+
+try:
+    if not pygame.mixer.get_init():
+        pygame.mixer.init()
+
+    sound_footsteps_file = load_external_sound("footsteps.mp3")
+    sound_celebration_file = load_external_sound("celebration.mp3")
+    sound_lost_file = load_external_sound("lost.mp3")
+    sound_opening_file = load_external_sound("opening.mp3")
+
+except pygame.error as error:
+    print("Audio initialization failed:", error)
+
+
+
+def start_background_music():
+    music_path = os.path.join(SOUND_DIR, "background.mp3")
+
+    try:
+        pygame.mixer.music.load(music_path)
+        pygame.mixer.music.set_volume(
+            settings.get("master_volume", 0.65)
+            * settings.get("music_volume", 0.5)
+        )
+        pygame.mixer.music.play(-1)
+    except (pygame.error, OSError) as error:
+        print("Could not load background music:", error)
+
 # Procedural Sound Synthesizer (Zero audio files required)
 def make_tone(freq=440, duration=0.10, volume=0.15, decay=False):
     sample_rate = 22050

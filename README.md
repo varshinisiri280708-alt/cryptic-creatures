@@ -74,3 +74,9 @@ Install the dependencies on your computer and run the game locally to verify gam
 ## Save Files and Settings
 
 The game creates `savegame.json` and `settings.json` beside the game when it runs.
+
+## 🎮 Play the Game Online
+
+▶ https://cryptic-escape-manor-game.streamlit.app
+
+Click the link above to play the game in your browser!
